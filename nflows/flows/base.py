@@ -71,7 +71,7 @@ class Flow(Distribution):
             )
         else:
             log_prob = self._distribution.log_prob(
-                num_samples, context=embedded_context
+                noise, context=embedded_context
             )
 
         if embedded_context is not None:
