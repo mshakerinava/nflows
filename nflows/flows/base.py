@@ -59,15 +59,20 @@ class Flow(Distribution):
 
         return samples
 
-    def sample_and_log_prob(self, num_samples, context=None):
+    def sample_and_log_prob(self, num_samples, context=None, noise=None):
         """Generates samples from the flow, together with their log probabilities.
 
         For flows, this is more efficient that calling `sample` and `log_prob` separately.
         """
         embedded_context = self._embedding_net(context)
-        noise, log_prob = self._distribution.sample_and_log_prob(
-            num_samples, context=embedded_context
-        )
+        if noise is None:
+            noise, log_prob = self._distribution.sample_and_log_prob(
+                num_samples, context=embedded_context
+            )
+        else:
+            log_prob = self._distribution.log_prob(
+                num_samples, context=embedded_context
+            )
 
         if embedded_context is not None:
             # Merge the context dimension with sample dimension in order to apply the transform.
