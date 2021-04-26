@@ -73,6 +73,8 @@ class Flow(Distribution):
             log_prob = self._distribution.log_prob(
                 noise, context=embedded_context
             )
+            if embedded_context is not None:
+                noise = noise.view(embedded_context.shape[0], num_samples, -1)
 
         if embedded_context is not None:
             # Merge the context dimension with sample dimension in order to apply the transform.
