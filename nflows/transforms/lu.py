@@ -67,9 +67,6 @@ class LULinear(Linear):
         logabsdet = self.logabsdet() * inputs.new_ones(outputs.shape[0])
         return outputs, logabsdet
 
-    def forward(self, inputs):
-        return self.forward_no_cache(inputs)
-
     def inverse_no_cache(self, inputs):
         """Cost:
             output = O(D^2N)
@@ -92,9 +89,6 @@ class LULinear(Linear):
         logabsdet = logabsdet * inputs.new_ones(outputs.shape[0])
 
         return outputs, logabsdet
-
-    def inverse(self, inputs):
-        return self.inverse_no_cache(inputs)
 
     def weight(self):
         """Cost:
