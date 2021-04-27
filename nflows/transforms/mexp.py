@@ -2,6 +2,7 @@
 
 import torch
 from torch import nn
+import scipy as sp
 
 from nflows.transforms.base import Transform
 
