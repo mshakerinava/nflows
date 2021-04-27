@@ -23,6 +23,6 @@ class ExpLinear(Transform):
 
     def inverse(self, z, context=None):
         W_inv = torch.matrix_exp(-self.A)
-        x = torch.matmul(Z - self.b, W_inv)
+        x = torch.matmul(z - self.b, W_inv)
         logabsdet = -torch.trace(self.A) * z.new_ones(x.shape[0])
         return x, logabsdet
