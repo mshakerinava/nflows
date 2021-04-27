@@ -2,7 +2,7 @@
 
 import torch
 from torch import nn
-import scipy as sp
+from scipy.linalg import logm
 
 from nflows.transforms.base import Transform
 
@@ -12,7 +12,7 @@ class ExpLinear(Transform):
         super().__init__()
         self.d = d
         dummy = nn.Linear(d, d)
-        self.A = nn.Parameter(torch.tensor(sp.linalg.logm(dummy.weight.detach().numpy()), dtype=torch.float32))
+        self.A = nn.Parameter(torch.tensor(logm(dummy.weight.detach().numpy()), dtype=torch.float32))
         self.b = nn.Parameter(dummy.bias.detach())
 
     def forward(self, x, context=None):
