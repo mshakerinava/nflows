@@ -30,15 +30,18 @@ class RealNVP(Transform):
     def forward(self, x, context=None):
         x1, x2 = x[:, :self.d], x[:, self.d:] 
         s = self.s_net(x1)
-        z1, z2 = x1, x2 * torch.exp(s) + self.t_net(x1)
+        t = self.t_net(x1)
+        z1 = x1
+        z2 = x2 * torch.exp(s) + t
         z = torch.cat([z1, z2], dim=-1)
         logabsdet = torchutils.sum_except_batch(s, num_batch_dims=1)
         return z, logabsdet
 
     def inverse(self, z, context=None):
         z1, z2 = z[:, :self.d], z[:, self.d:] 
-        x1 = z1
         s = self.s_net(z1)
-        x2 = (z2 - self.t_net(z1)) * torch.exp(-s)
+        t = self.t_net(z1)
+        x1 = z1
+        x2 = (z2 - t) * torch.exp(-s)
         logabsdet = -torchutils.sum_except_batch(s, num_batch_dims=1)
         return torch.cat([x1, x2], -1), logabsdet

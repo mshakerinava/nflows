@@ -229,3 +229,16 @@ class InverseTransform(Transform):
 
     def inverse(self, inputs, context=None):
         return self._transform(inputs, context)
+
+
+class LogTransform(Transform):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, inputs, context=None):
+        print('forward:', inputs)
+        return inputs, inputs.new_zeros(inputs.shape[0])
+
+    def inverse(self, inputs, context=None):
+        print('inverse:', inputs)
+        return inputs, inputs.new_zeros(inputs.shape[0])
