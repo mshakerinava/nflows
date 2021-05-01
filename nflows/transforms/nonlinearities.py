@@ -102,7 +102,7 @@ class LeakyReLU(Transform):
             raise ValueError("Slope must be positive.")
         super().__init__()
         self.negative_slope = negative_slope
-        self.log_negative_slope = torch.log(torch.as_tensor(self.negative_slope))
+        self.register_buffer('log_negative_slope', torch.log(torch.as_tensor(self.negative_slope)))
 
     def forward(self, inputs, context=None):
         outputs = F.leaky_relu(inputs, negative_slope=self.negative_slope)
