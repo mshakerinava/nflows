@@ -114,6 +114,8 @@ class LeakyReLU(Transform):
     def inverse(self, inputs, context=None):
         outputs = F.leaky_relu(inputs, negative_slope=(1 / self.negative_slope))
         mask = (inputs < 0).type(torch.Tensor)
+        print(mask.device)
+        print(self.log_negative_slope.device)
         logabsdet = -self.log_negative_slope * mask
         logabsdet = torchutils.sum_except_batch(logabsdet, num_batch_dims=1)
         return outputs, logabsdet
