@@ -18,15 +18,15 @@ from nflows.utils import torchutils
 class Tanh(Transform):
     def forward(self, inputs, context=None):
         outputs = torch.tanh(inputs)
-        logabsdet = torch.log(1 - outputs ** 2)
+        logabsdet = torch.log(1 - outputs ** 2 + 1e-6)
         logabsdet = torchutils.sum_except_batch(logabsdet, num_batch_dims=1)
         return outputs, logabsdet
 
     def inverse(self, inputs, context=None):
         if torch.min(inputs) <= -1 or torch.max(inputs) >= 1:
             raise InputOutsideDomain()
-        outputs = 0.5 * torch.log((1 + inputs) / (1 - inputs))
-        logabsdet = -torch.log(1 - inputs ** 2)
+        outputs = 0.5 * torch.log((1 + inputs) / (1 - inputs) + 1e-6)
+        logabsdet = -torch.log(1 - inputs ** 2 + 1e-6)
         logabsdet = torchutils.sum_except_batch(logabsdet, num_batch_dims=1)
         return outputs, logabsdet
 
